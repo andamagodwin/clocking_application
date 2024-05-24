@@ -1,0 +1,86 @@
+
+    <%- include("partials/header") %>
+    <div class="container">
+        <div class="box">
+            <h1><span class="time" id="currentTime"></span></h1>
+             <p><span class="date" id="currentDate"></span></p>
+            
+            <div class="date"></div>
+            <button class="timeIn" id="timeButton">Time In</button>
+        </div>
+        
+    </div>
+    <script>
+        function getCurrentTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            const timeString = `${hours < 10 ? '0' + hours : hours}:${minutes} Hrs`;
+            return timeString;
+        }
+         function getCurrentDate() {
+            const now = new Date();
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            const dayName = days[now.getDay()];
+            const day = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear().toString().substr(-2);
+
+            const dateString = `${dayName}, ${day}/${monthName}/${year}`;
+            return dateString;
+        }
+
+        function updateTime() {
+            const currentTimeElement = document.getElementById('currentTime');
+            currentTimeElement.innerText = getCurrentTime();
+        }
+        function updateDate() {
+            const currentDateElement = document.getElementById('currentDate');
+            currentDateElement.innerText = getCurrentDate();
+        }
+
+        // Update the time immediately and then every second
+        updateTime();
+        updateDate();
+        setInterval(updateTime, 1000);
+        setInterval(updateDate, 86400000); 
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const timeButton = document.getElementById('timeButton');
+            const userId = '<%= userId %>'; // Replace with actual user ID
+
+            timeButton.addEventListener('click', () => {
+              fetch('/timelog/log-time', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId: userId })
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.status === 'timeIn') {
+                  timeButton.textContent = 'Time Out';
+                  timeButton.className="timeOut";
+                } else if (data.status === 'timeOut') {
+                  timeButton.textContent = 'Time In';
+                  timeButton.className="timeIn";
+                }
+                // alert('Time logged: ' + new Date(data.time).toLocaleString());
+              })
+              .catch(error => console.error('Error:', error));
+            });
+        });
+
+       
+      
+
+
+
+
+    </script>
+</body>
+</html>

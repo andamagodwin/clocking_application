@@ -1,0 +1,57 @@
+
+<head>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  
+  <div class="container">
+    <div class="signin-container">
+      <form action="/signin" method="POST" class="form">
+        <p>Sign in</p>
+        <div class="form-group group">
+          <input
+            type="email"
+            name="email"
+            class="form-control input-sign"
+            id="email"
+            placeholder="Email"
+            required
+          />
+          <div class="emailError"><%= emailError %></div>
+          <input
+            type="password"
+            name="password"
+            class="form-control input-sign"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <div class="passwordError"><%= passwordError%></div>
+        </div>
+
+        <input type="submit" value="Login to clocking" class="signin-btn" />
+      </form>
+    </div>
+  </div>
+  <!-- <script>
+  const form = document.querySelector("form");
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = form.email.value;
+    const password = form.password.value;
+    try {
+      const res = await fetch("/signin", {
+        method: "POST",
+        body: JSON.stringify({email,password}),
+        headers: {"Content-Type":"application/json"}
+      });
+      const data=await res.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+</script> -->
+</body>
